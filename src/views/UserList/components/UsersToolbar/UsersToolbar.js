@@ -2,9 +2,12 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/styles';
 import { Button,Fade,TextField , Backdrop, Modal } from '@material-ui/core';
-
+import { withRouter } from "react-router-dom";
+import { add_user } from "../../../../dataStore/action/userAction";
+import {connect} from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
   formStyl: {
@@ -42,24 +45,36 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 const UsersToolbar = props => {
-  const { className, ...rest } = props;
+  const {className, ...rest } = props;
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-const [newUser, setNewUser] = useState([])
+  const [newUser, setNewUser] = useState({'firstname': '', 'lastname' : '', 'email': '', 'picture': []});
+  const [userIsCreated, setuserIsCreated] = useState(false);
+
   const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
-  const handlechange = (e) => {
-    //alert(e.target.value)
-    //setNewUser(["firstName" = 'w']);
-    setOpen(false);
+
+  const handlechange = (event) => {
+    const {files, value, name} = event.target;
+    let DataHolder = newUser;
+    name === 'picture' ? (DataHolder[name] = files[0]) : (DataHolder[name] = value);
+    setNewUser(DataHolder)
   };
+
+  const handleSubmit = ()=>{
+    props.add_user(newUser);
+    setNewUser({'firstname': '', 'lastname' : '', 'email': '', 'picture': []})
+      setuserIsCreated(true);
+  }
 
   return (
     <div
@@ -68,6 +83,7 @@ const [newUser, setNewUser] = useState([])
     >
       <div className={classes.row}>
         <span className={classes.spacer} />
+        
         <Button
         onClick={handleOpen}
           color="primary"
@@ -91,33 +107,56 @@ const [newUser, setNewUser] = useState([])
         <Fade in={open}>
           <div className={classes.paper}>
             <form className={classes.formStyl} noValidate autoComplete="off">
-              <TextField
-                label="First name"
-                id="firstname"
-                defaultValue="first name"
-                className={classes.textField}
-                onChange = {()=>handlechange(this)}
-                margin="normal"
-                size="small"
-              />
-              <TextField
-                label="Last Name"
-                id="lastname"
-                defaultValue="lastname"
-                className={classes.textField}
-                margin="normal"
-                size="small"
-              />
-              <TextField
-                label="email"
-                id="email"
-                defaultValue="email@email.com"
-                className={classes.textField}
-                margin="normal"
-                size="small"
-              />
+              <div>
+                <TextField
+                  label="First name"
+                  name="firstname"
+                  value = {newUser.firstname}
+                  className={classes.textField}
+                  onChange = {(event)=>handlechange(event)}
+                  margin="normal"
+                  size="small"
+                />
+                <TextField
+                  label="Last Name"
+                  name="lastname"
+                  value = {newUser.lastname}
+                  onChange = {(event)=>handlechange(event)}
+                  className={classes.textField}
+                  margin="normal"
+                  size="small"
+                />
+              </div>
+              <div>
+                <TextField
+                  value = {newUser.email}
+                  label="email"
+                  name="email"
+                  onChange = {(event)=>handlechange(event)}
+                  className={classes.textField}
+                  margin="normal"
+                  size="small"
+                />
+                
+                <input
+                label ="Upload File"
+                  name="picture"
+                  type="file"
+                  onChange = {(event=>handlechange(event))}
+                  
+                />
+              </div>
               
+              <div>
+              <Button variant="contained"  onClick={(event)=>handleSubmit()} component="label" type="submit">Register</Button>
+              </div>
             </form>
+            
+            {userIsCreated && <div>
+              <br></br>
+                <Alert severity="success">user is created </Alert>
+            </div> }
+            
           </div>
         </Fade>
       </Modal>
@@ -131,4 +170,15 @@ UsersToolbar.propTypes = {
   className: PropTypes.string
 };
 
-export default UsersToolbar;
+function mapDispatchToProps(dispatch) {
+  return {
+    add_user : (user_data) => dispatch(add_user(user_data))
+  }
+}
+function mapStateToProps(state) {
+  return {
+    users : state.users.users,
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UsersToolbar));

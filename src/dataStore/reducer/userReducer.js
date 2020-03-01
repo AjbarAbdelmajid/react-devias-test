@@ -75,14 +75,23 @@ const initialState = {
         }
       ],
 }
-
+/* 
+{'firstname': '', 'lastname' : '', 'email': '', 'picture': []}
+*/
 const UserReducer = (state = initialState, action)=>{
 
     switch (action.type) {
         case ADD_USER:
+            let dataHolder = {};
+            dataHolder.id = uuid();
+            
+             dataHolder.name = action.newUser.firstname + action.newUser.lastname;
+             dataHolder.email = action.newUser.email;
+             dataHolder.avatarUrl = '/test'; 
+             dataHolder.active = true;
             return {
                 ...state, 
-                users: action.newUser
+                users: [...state.users, dataHolder]
             };
         case CHANGE_STATUS:
             state.users.forEach(user => {

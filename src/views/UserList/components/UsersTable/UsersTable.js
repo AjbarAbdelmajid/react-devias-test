@@ -7,11 +7,13 @@ import { makeStyles } from '@material-ui/styles';
 import {connect} from 'react-redux';
 import { withRouter } from "react-router-dom";
 import { activation } from "../../../../dataStore/action/userAction";
+import { TotalUsers } from '../../../Dashboard/components';
 import {
   Card,
   CardActions,
   CardContent,
   Table,
+  Grid,
   TableBody,
   Avatar,
   TableCell,
@@ -22,14 +24,14 @@ import {
   Button
 } from '@material-ui/core';
 
-
+import UsersToolbar from "../UsersToolbar";
 
 class UsersTable extends React.Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
-      usersList : this.props.usersList,
+      users_list : this.props.users_list,
       selectedUsers: [],
       rowsPerPage : 10,
       page : 0,
@@ -96,14 +98,13 @@ class UsersTable extends React.Component {
   };
 
   handleActivation = (user, activeStatus) => {
-    this.props.userActivation(user, activeStatus);
-    this.setState({usersList : this.props.usersList})
+    this.props.user_activation(user, activeStatus);
+    this.setState({users_list : this.props.users_list})
   };
 
-  componentWillReceiveProps({usersList}){
-    this.setState({users : usersList})
-  }
-
+  componentWillReceiveProps(nextProps) {
+    this.setState({users_list : nextProps.users_list});
+  };
   useStyles = makeStyles(theme => ({
     root: {},
     content: {
@@ -129,9 +130,30 @@ class UsersTable extends React.Component {
 
   render(){
     const { className, ...rest } = this.props;
-    const { usersList } = this.state;
+    const { users_list } = this.state;
 
     return (
+      <>
+      <Grid
+        container
+        spacing={2}
+      >
+        <Grid
+          item
+          lg={3}
+          sm={6}
+          xl={3}
+          xs={12}
+        >
+          {/* {setTimeout(() => {
+            alert(users_list.filter(user=> user.active === true ).length)
+          }, 3000)} */}
+          <TotalUsers   totalusersnbr ={users_list.length} active = {users_list.filter(user=> user.active === true ).length} />
+        </Grid>
+
+      </Grid>
+      <UsersToolbar/>
+
       <Card
         {...rest}
         className={clsx(this.state.classes.root, className)}
@@ -143,7 +165,7 @@ class UsersTable extends React.Component {
                 <TableHead>
                   <TableRow>
                     { 
-                      Object.keys(usersList[0]).map((fieldName, key)=>{
+                      Object.keys(users_list[0]).map((fieldName, key)=>{
                         if(fieldName != 'id' && fieldName != 'avatarUrl'){
                           return (<TableCell key={key}>{fieldName}</TableCell>)
                         }
@@ -154,7 +176,7 @@ class UsersTable extends React.Component {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {this.state.usersList.slice(0, this.state.rowsPerPage).map(user => (
+                  {this.state.users_list.map(user => (
                     
                     <TableRow
                       className={this.state.classes.tableRow}
@@ -190,7 +212,7 @@ class UsersTable extends React.Component {
         <CardActions className={this.state.classes.actions}>
           <TablePagination
             component="div"
-            count={usersList.length}
+            count={users_list.length}
             onChangePage={this.handlePageChange}
             onChangeRowsPerPage={this.handleRowsPerPageChange}
             page={this.state.page}
@@ -199,6 +221,7 @@ class UsersTable extends React.Component {
           />
         </CardActions>
       </Card>
+      </>
     );
   }
   
@@ -206,16 +229,15 @@ class UsersTable extends React.Component {
 
 UsersTable.propTypes = {
   className: PropTypes.string,
-  users: PropTypes.array.isRequired
 };
 const mapDispatchToProps = (dispatch) =>{
   return {
-    userActivation : (userId, userStatus) => dispatch(activation(userId, userStatus))
+    user_activation : (userId, userStatus) => dispatch(activation(userId, userStatus))
   }
 }
 const mapStateToProps = state =>{
   return {
-    usersList : state.users.users,
+    users_list : state.users.users,
   }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UsersTable));

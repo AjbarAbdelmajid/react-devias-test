@@ -11,3 +11,8 @@ export const activation = (userId, status) =>({
     status : status,
     userId: userId,
 })
+
+export const add_user = data =>({
+    type: ADD_USER,
+    newUser: data,
+})

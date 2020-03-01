@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -15,10 +15,12 @@ class TotalUsers extends React.Component{
   constructor(props, context) {
     super(props, context);
     this.state = {
-      usersList : this.props.users,
+      usersList : this.props.usersList,
       selectedUsers: [],
       rowsPerPage : 10,
       page : 0,
+      activeUsers : Math.ceil(this.props.active),
+      totalUsersNbr : this.props.totalusersnbr,
       classes : makeStyles(theme => ({
         root: {},
         content: {
@@ -43,23 +45,22 @@ class TotalUsers extends React.Component{
       })),
     };
   };
-  shouldComponentUpdate(nextProps, nextState, nextContext){
-    alert('received props update '+ this.state.usersList[0].active);
-}
   componentWillReceiveProps(nextProps) {
-    alert(nextProps)
-    alert('received props update '+ this.state.usersList[0].active);
-  }
+    if(nextProps){
+
+      this.setState({activeUsers : parseInt(nextProps.active + '')});
+      this.setState({totalUsersNbr : nextProps.totalusersnbr});
+    };
+    
+  };
   render(){
     
-    const {nbrActiveUsers,users, toatalUsers, className, ...rest } = this.props;
+    const { className, ...rest } = this.props;
+    const {activeUsers, totalUsersNbr} = this.state;
 
-
-    const TotalUsersNbr = users.length;
-    const ActiveUsers = users.filter(user=> user.active === true ).length
-  
     const classes = this.state.classes;
-    const activeUsersPersentage = parseInt(ActiveUsers) * 100 / parseInt(TotalUsersNbr);
+    const activeUsersPersentage =  Math.ceil(parseInt(activeUsers) * 100 / parseInt(totalUsersNbr));
+
     return (
       <Card
         {...rest}
@@ -79,7 +80,7 @@ class TotalUsers extends React.Component{
               >
                 TOTAL USERS
               </Typography>
-              <Typography variant="h3">{TotalUsersNbr}</Typography>
+              <Typography variant="h3">{totalUsersNbr}</Typography>
             </Grid>
             <Grid item>
               <Avatar className={classes.avatar}>

@@ -15,29 +15,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Dashboard = ({users}) => {
-  useEffect(() => {
-    // Update the document title using the browser API
-  });
+  let counter = users.filter(user=> user.active === true ).length;
+
   const classes = useStyles();
   const TotalUsersNbr = users.length;
   const nbractiveUsers = users.filter(user=> user.active === true ).length
   return (
     <div className={classes.root}>
-      <Grid
-        container
-        spacing={2}
-      >
-        <Grid
-          item
-          lg={3}
-          sm={6}
-          xl={3}
-          xs={12}
-        >
-          <TotalUsers nbrActiveUsers = {nbractiveUsers} toatalUsers ={TotalUsersNbr} />
-        </Grid>
 
-      </Grid>
       <USERS />
     </div>
   );
