@@ -1,10 +1,7 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import ArrowDownwardSharpIcon from '@material-ui/icons/ArrowDownwardSharp';
 import PeopleIcon from '@material-ui/icons/PeopleOutlined';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -89,21 +86,18 @@ class TotalUsers extends React.Component{
             </Grid>
           </Grid>
           <div className={classes.difference}>
-            {activeUsersPersentage > 50 ? <ArrowUpwardIcon className={classes.differenceIcon} /> : 
-                                     <ArrowDownwardSharpIcon className={classes.differenceIcon} />
-            }
+            
             
             <Typography
               className={classes.differenceValue}
               variant="body2"
             >
-              {activeUsersPersentage}%
+              
             </Typography>
             <Typography
               className={classes.caption}
               variant="caption"
-            >
-              active users
+            >{activeUsersPersentage}% active users
             </Typography>
           </div>
         </CardContent>

@@ -1,12 +1,8 @@
-import React, {useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { Grid } from '@material-ui/core';
 import USERS from '../UserList';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import {
-  TotalUsers,
-} from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -15,11 +11,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Dashboard = ({users}) => {
-  let counter = users.filter(user=> user.active === true ).length;
 
   const classes = useStyles();
-  const TotalUsersNbr = users.length;
-  const nbractiveUsers = users.filter(user=> user.active === true ).length
   return (
     <div className={classes.root}>
 

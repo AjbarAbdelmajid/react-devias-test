@@ -1,7 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
 import {connect} from 'react-redux';
@@ -166,11 +165,13 @@ class UsersTable extends React.Component {
                   <TableRow>
                     { 
                       Object.keys(users_list[0]).map((fieldName, key)=>{
-                        if(fieldName != 'id' && fieldName != 'avatarUrl'){
+                        if(fieldName !== 'id' && fieldName !== 'avatarUrl'){
                           return (<TableCell key={key}>{fieldName}</TableCell>)
                         }
                         else if(fieldName === 'id')
-                          return (<TableCell key={key} > </TableCell>)
+                          return (<TableCell key={key} ></TableCell>)
+                        else
+                          return false
                         })
                     }
                   </TableRow>

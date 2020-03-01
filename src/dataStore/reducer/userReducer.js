@@ -90,8 +90,6 @@ const UserReducer = (state = initialState, action)=>{
              dataHolder.avatarUrl = URL.createObjectURL(action.newUser.picture); 
              dataHolder.active = true;
 
-            console.log(action.newUser.picture)
-             alert('stop')
             return {
                 ...state, 
                 users: [...state.users, dataHolder]

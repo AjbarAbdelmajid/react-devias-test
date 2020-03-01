@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/styles';
-import { Button,Fade,TextField , Backdrop, Modal } from '@material-ui/core';
+import { Button,Fade,TextField , Backdrop, Modal,Grid,CardHeader, CardActions, CardContent, Divider, } from '@material-ui/core';
 import { withRouter } from "react-router-dom";
 import { add_user } from "../../../../dataStore/action/userAction";
 import {connect} from 'react-redux';
@@ -15,6 +15,9 @@ const useStyles = makeStyles(theme => ({
       margin: theme.spacing(1),
       width: 200,
     },
+  },
+  addUser: {
+    marginBottom : '1.5%'
   },
   modal: {
     display: 'flex',
@@ -67,12 +70,7 @@ const UsersToolbar = props => {
   const handlechange = (event) => {
     const {files, value, name} = event.target;
     let DataHolder = newUser;
-    if(name === 'picture'){ 
-      console.log(URL.createObjectURL(files[0]))
-      alert('stop in UserToolbar')
-      DataHolder[name] = files[0]
-    }else
-      DataHolder[name] = value;
+    name === 'picture' ? (DataHolder[name] = files[0]) :  (DataHolder[name] = value);
     setNewUser(DataHolder)
   };
 
@@ -89,8 +87,8 @@ const UsersToolbar = props => {
     >
       <div className={classes.row}>
         <span className={classes.spacer} />
-        
         <Button
+        className={classes.addUser}
         onClick={handleOpen}
           color="primary"
           variant="contained"
@@ -112,8 +110,11 @@ const UsersToolbar = props => {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <form className={classes.formStyl} noValidate autoComplete="off">
-              <div>
+            <form className={classes.formStyl} autoComplete="off">
+            <CardHeader subheader="" title="add user"/>              
+              <Divider />
+              <CardContent>
+                <Grid item md={6} xs={12}>
                 <TextField
                   label="First name"
                   name="firstname"
@@ -123,6 +124,8 @@ const UsersToolbar = props => {
                   margin="normal"
                   size="small"
                 />
+                </Grid>
+                <Grid item md={6} xs={12}>
                 <TextField
                   label="Last Name"
                   name="lastname"
@@ -132,8 +135,8 @@ const UsersToolbar = props => {
                   margin="normal"
                   size="small"
                 />
-              </div>
-              <div>
+                </Grid>
+                <Grid item md={6} xs={12}>
                 <TextField
                   Defaultvalue = {newUser.email}
                   label="email"
@@ -143,19 +146,24 @@ const UsersToolbar = props => {
                   margin="normal"
                   size="small"
                 />
-                
-                <input
-                label ="Upload File"
-                  name="picture"
-                  type="file"
-                  onChange = {(event=>handlechange(event))}
-                  
-                />
-              </div>
-              
-              <div>
-              <Button variant="contained"  onClick={(event)=>handleSubmit()} component="label" type="submit">Register</Button>
-              </div>
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <Button className={classes.uploadButton} color="primary" variant="text" >
+                    <input
+                    label ="Upload File"
+                      name="picture"
+                      type="file"
+                      onChange = {(event=>handlechange(event))}
+                      
+                    />
+                  </Button>
+                </Grid>
+              </CardContent>
+              <Divider />
+              <CardActions>
+                <Button variant="contained"  onClick={(event)=>handleSubmit()} component="label" type="submit">Register</Button>
+              </CardActions>
+                              
             </form>
             
             {userIsCreated && <div>
