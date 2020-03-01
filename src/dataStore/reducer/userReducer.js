@@ -87,8 +87,11 @@ const UserReducer = (state = initialState, action)=>{
             
              dataHolder.name = action.newUser.firstname + action.newUser.lastname;
              dataHolder.email = action.newUser.email;
-             dataHolder.avatarUrl = '/test'; 
+             dataHolder.avatarUrl = URL.createObjectURL(action.newUser.picture); 
              dataHolder.active = true;
+
+            console.log(action.newUser.picture)
+             alert('stop')
             return {
                 ...state, 
                 users: [...state.users, dataHolder]

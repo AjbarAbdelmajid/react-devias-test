@@ -58,6 +58,7 @@ const UsersToolbar = props => {
 
   const handleOpen = () => {
     setOpen(true);
+    setuserIsCreated(false);
   };
   const handleClose = () => {
     setOpen(false);
@@ -66,7 +67,12 @@ const UsersToolbar = props => {
   const handlechange = (event) => {
     const {files, value, name} = event.target;
     let DataHolder = newUser;
-    name === 'picture' ? (DataHolder[name] = files[0]) : (DataHolder[name] = value);
+    if(name === 'picture'){ 
+      console.log(URL.createObjectURL(files[0]))
+      alert('stop in UserToolbar')
+      DataHolder[name] = files[0]
+    }else
+      DataHolder[name] = value;
     setNewUser(DataHolder)
   };
 
@@ -111,7 +117,7 @@ const UsersToolbar = props => {
                 <TextField
                   label="First name"
                   name="firstname"
-                  value = {newUser.firstname}
+                  Defaultvalue = {newUser.firstname}
                   className={classes.textField}
                   onChange = {(event)=>handlechange(event)}
                   margin="normal"
@@ -120,7 +126,7 @@ const UsersToolbar = props => {
                 <TextField
                   label="Last Name"
                   name="lastname"
-                  value = {newUser.lastname}
+                  Defaultvalue = {newUser.lastname}
                   onChange = {(event)=>handlechange(event)}
                   className={classes.textField}
                   margin="normal"
@@ -129,7 +135,7 @@ const UsersToolbar = props => {
               </div>
               <div>
                 <TextField
-                  value = {newUser.email}
+                  Defaultvalue = {newUser.email}
                   label="email"
                   name="email"
                   onChange = {(event)=>handlechange(event)}
