@@ -9,7 +9,7 @@ commands to run :
 ## what i have added here 
 
 ### `redux-store`
-inside src folder u will found a folder called dataStore there where i put my reducer and action
+inside src folder u will fined a folder called dataStore there where i put my reducer and action
 - in the userAction u will fined two invoked functions one for user activation and the other for adding users
 - in the userReducer u will fined a dummy user-data as initialState and two switch cases for action handling
 
